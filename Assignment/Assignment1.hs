@@ -9,7 +9,7 @@
 
 module Assignment1 where
 
-import Prelude hiding (sqrt)
+import           Prelude hiding (sqrt)
 
 --problem 15
 repli :: [Char] -> Integer -> [Char]
@@ -18,7 +18,7 @@ repli cs n = repliIter (n-1) cs
   where
     repliIter :: Integer -> [Char] -> [Char]
     repliIter 0 cs' = cs'
-    repliIter n' cs' = repliIter (n'-1) (cs ++ cs') 
+    repliIter n' cs' = repliIter (n'-1) (cs ++ cs')
 
 
 --problem 16
@@ -29,14 +29,14 @@ dropEvery (a:as) n = reverse(dropStep [a] 1 as)
     dropStep :: [a] -> Integer -> [a] -> [a]
     dropStep acc _ []     = acc
     dropStep acc t (a:as) = if help t then dropStep acc (t+1) as else dropStep (a:acc)(t+1) (as)
-      where 
+      where
         help :: Integer -> Bool
         help t = ((t+1) `mod` (n))== 0
 
 --problem 18
 slice :: [a] -> Integer -> Integer -> [a]
 slice _ 1 0   = []
-slice [] _ _  = []   
+slice [] _ _  = []
 slice (a:as) str end
   | end < str = []
   | str < 1   = []
@@ -95,4 +95,3 @@ goldbach n = goldbachIter (2, n-2)
       | otherwise = goldbachIter(a+1,b-1)
     test :: Integer -> Integer -> Bool
     test c d = isPrime c && isPrime d
-
