@@ -3,11 +3,13 @@
   150120057
 
   BLG458E - Functional Programming
-  Assigment 1
-  08.03.16
+  Assigment 3
+  29.04.16
 -}
 
 module BinaryTree where
+
+import           Data.Maybe
 
 class BinaryTree t where
   leftTree :: t a -> Maybe (t a)
@@ -44,3 +46,25 @@ instance BinaryTree Tree2 where
     Node2 _ _ -> Nothing
   leaf = Leaf2
   node _ = Node2
+
+isLeaf :: BinaryTree t => t a -> Bool
+isLeaf t = isNothing (leftTree t)
+
+
+isBranching :: BinaryTree t => t a -> Bool
+isBranching t = isJust (leftTree t)
+
+preorder :: BinaryTree t => t a -> [a]
+preorder = undefined
+--preorder t
+--  | isLeaf t  = [fromJust(rootValue t)]
+--  | otherwise = fromJust(rootValue t) : preorder (fromJust(leftTree t)) ++ preorder (fromJust(rightTree t))
+
+inorder :: BinaryTree t => t a -> [a]
+inorder = undefined
+
+postorder :: BinaryTree t => t a -> [a]
+postorder = undefined
+
+trimLeaves :: BinaryTree t => t a -> t a
+trimLeaves = undefined
