@@ -50,32 +50,40 @@ instance BinaryTree Tree2 where
   node _ = Node2
 
 isLeaf :: BinaryTree t => t a -> Bool
-isLeaf t = isNothing (leftTree t)
-
+isLeaf = isNothing.leftTree
 
 isBranching :: BinaryTree t => t a -> Bool
-isBranching t = isJust (leftTree t)
+isBranching = isJust.leftTree
+
+getValue :: Maybe a -> [a]
+getValue Nothing= []
+getValue (Just t) = [t]
 
 preorder :: BinaryTree t => t a -> [a]
---preorder = undefined
 preorder t
-  | isLeaf t               = [fromJust(rootValue t)]
-  | isJust(rootValue t)    = fromJust(rootValue t) : preorder (fromJust(leftTree t)) ++ preorder (fromJust(rightTree t))
-  | otherwise              = preorder (fromJust(leftTree t)) ++ preorder (fromJust(rightTree t))
+  | isLeaf t  = (getValue.rootValue) t
+  | otherwise = (getValue.rootValue) t ++ (preorder.fromJust.leftTree) t ++ (preorder.fromJust.rightTree) t
+
 
 inorder :: BinaryTree t => t a -> [a]
 inorder t
-  | isLeaf t               = [fromJust(rootValue t)]
-  | isJust(rootValue t)    = inorder (fromJust(leftTree t)) ++ [fromJust(rootValue t)] ++ inorder (fromJust(rightTree t))
-  | otherwise              = inorder (fromJust(leftTree t)) ++ inorder (fromJust(rightTree t))
+  | isLeaf t  = (getValue.rootValue) t
+  | otherwise = (inorder.fromJust.leftTree) t ++ (getValue.rootValue) t ++ (inorder.fromJust.rightTree) t
 
 
 postorder :: BinaryTree t => t a -> [a]
 postorder t
-  | isLeaf t               = [(fromJust.rootValue) t]
-  | (isJust.rootValue) t   = (postorder.fromJust.leftTree) t ++ (postorder.fromJust.rightTree) t ++ [(fromJust.rootValue) t]
-  | otherwise              = (postorder.fromJust.leftTree) t ++ (postorder.fromJust.rightTree) t
+  | isLeaf t  = (getValue.rootValue) t
+  | otherwise = (postorder.fromJust.leftTree) t ++ (postorder.fromJust.rightTree) t ++ (getValue.rootValue) t
 
+makeLeaf :: BinaryTree t => Maybe (t a) -> t a
+makeLeaf (Just t)
+  | isLeaf t                = t
+  | (isNothing.rootValue) t = (makeLeaf.leftTree) t
+  | otherwise               = (leaf.fromJust.rootValue) t
+makeLeaf Nothing = error "imposible case in makeLeaf"
 
 trimLeaves :: BinaryTree t => t a -> t a
-trimLeaves = undefined
+trimLeaves t
+  | isLeaf t  = t
+  | otherwise = node ((fromJust.rootValue) t) ((makeLeaf.leftTree) t) $ (makeLeaf.rightTree) t
