@@ -19,7 +19,9 @@ class BinaryTree t where
   node :: a -> t a -> t a -> t a
 
 data Tree1 a = Leaf1 a | Node1 a (Tree1 a) (Tree1 a)
+               deriving(Show)
 data Tree2 a = Leaf2 a | Node2 (Tree2 a) (Tree2 a)
+               deriving(Show)
 
 instance BinaryTree Tree1 where
   leftTree t = case t of
@@ -55,16 +57,25 @@ isBranching :: BinaryTree t => t a -> Bool
 isBranching t = isJust (leftTree t)
 
 preorder :: BinaryTree t => t a -> [a]
-preorder = undefined
---preorder t
---  | isLeaf t  = [fromJust(rootValue t)]
---  | otherwise = fromJust(rootValue t) : preorder (fromJust(leftTree t)) ++ preorder (fromJust(rightTree t))
+--preorder = undefined
+preorder t
+  | isLeaf t               = [fromJust(rootValue t)]
+  | isJust(rootValue t)    = fromJust(rootValue t) : preorder (fromJust(leftTree t)) ++ preorder (fromJust(rightTree t))
+  | otherwise              = preorder (fromJust(leftTree t)) ++ preorder (fromJust(rightTree t))
 
 inorder :: BinaryTree t => t a -> [a]
-inorder = undefined
+inorder t
+  | isLeaf t               = [fromJust(rootValue t)]
+  | isJust(rootValue t)    = inorder (fromJust(leftTree t)) ++ [fromJust(rootValue t)] ++ inorder (fromJust(rightTree t))
+  | otherwise              = inorder (fromJust(leftTree t)) ++ inorder (fromJust(rightTree t))
+
 
 postorder :: BinaryTree t => t a -> [a]
-postorder = undefined
+postorder t
+  | isLeaf t               = [(fromJust.rootValue) t]
+  | (isJust.rootValue) t   = (postorder.fromJust.leftTree) t ++ (postorder.fromJust.rightTree) t ++ [(fromJust.rootValue) t]
+  | otherwise              = (postorder.fromJust.leftTree) t ++ (postorder.fromJust.rightTree) t
+
 
 trimLeaves :: BinaryTree t => t a -> t a
 trimLeaves = undefined
