@@ -56,7 +56,7 @@ isBranching :: BinaryTree t => t a -> Bool
 isBranching = isJust.leftTree
 
 getValue :: Maybe a -> [a]
-getValue Nothing= []
+getValue Nothing  = []
 getValue (Just t) = [t]
 
 preorder :: BinaryTree t => t a -> [a]
@@ -64,12 +64,10 @@ preorder t
   | isLeaf t  = (getValue.rootValue) t
   | otherwise = (getValue.rootValue) t ++ (preorder.fromJust.leftTree) t ++ (preorder.fromJust.rightTree) t
 
-
 inorder :: BinaryTree t => t a -> [a]
 inorder t
   | isLeaf t  = (getValue.rootValue) t
   | otherwise = (inorder.fromJust.leftTree) t ++ (getValue.rootValue) t ++ (inorder.fromJust.rightTree) t
-
 
 postorder :: BinaryTree t => t a -> [a]
 postorder t
@@ -78,9 +76,9 @@ postorder t
 
 makeLeaf :: BinaryTree t => Maybe (t a) -> t a
 makeLeaf (Just t)
-  | isLeaf t                = t
-  | (isNothing.rootValue) t = (makeLeaf.leftTree) t
-  | otherwise               = (leaf.fromJust.rootValue) t
+  | isLeaf t            = t
+  | (isJust.rootValue) t = (leaf.fromJust.rootValue) t
+  | otherwise            = (makeLeaf.leftTree) t
 makeLeaf Nothing = error "imposible case in makeLeaf"
 
 trimLeaves :: BinaryTree t => t a -> t a
